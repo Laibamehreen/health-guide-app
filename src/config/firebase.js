@@ -26,6 +26,17 @@ if (
 ) {
   console.warn('Firebase keys are not configured or are placeholders. App will run in LOCAL MOCK MODE.');
   isMockMode = true;
+  try {
+    const fallbackConfig = {
+      apiKey: 'AIzaSyMockKeyForVercelDeployment0000',
+      projectId: 'health-guide-mock',
+      databaseURL: 'https://health-guide-mock-default-rtdb.firebaseio.com',
+    };
+    app = getApps().length === 0 ? initializeApp(fallbackConfig) : getApp();
+    db = getDatabase(app);
+  } catch (e) {
+    console.warn('Fallback database init:', e);
+  }
 } else {
   try {
     if (getApps().length === 0) {
@@ -39,6 +50,17 @@ if (
   } catch (error) {
     console.error('Firebase initialization failed. Falling back to LOCAL MOCK MODE:', error);
     isMockMode = true;
+    try {
+      const fallbackConfig = {
+        apiKey: 'AIzaSyMockKeyForVercelDeployment0000',
+        projectId: 'health-guide-mock',
+        databaseURL: 'https://health-guide-mock-default-rtdb.firebaseio.com',
+      };
+      app = getApps().length === 0 ? initializeApp(fallbackConfig) : getApp();
+      db = getDatabase(app);
+    } catch (e) {
+      // ignore fallback error
+    }
   }
 }
 
